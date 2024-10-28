@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tap_on/User_Service/US_PreBooking.dart';
-import 'package:tap_on/User_Service/US_ProviderOrderStatus.dart';
 import 'package:tap_on/User_Tools/UT_ProviderOrderStatus.dart';
 import 'package:tap_on/widgets/Loading.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +11,7 @@ import 'package:http/http.dart' as http;
 class UT_ToolRequest extends StatefulWidget {
   final Map<String, dynamic> product;
   final String shopEmail;
+  
   const UT_ToolRequest({
     required this.product,
     required this.shopEmail,
@@ -23,15 +22,7 @@ class UT_ToolRequest extends StatefulWidget {
 }
 
 class _UT_ToolRequestState extends State<UT_ToolRequest> {
-  final List<String> weekdays = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday'
-  ];
+  final List<String> weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   List<String> selectedWeekdays = [];
   TextEditingController _qytController = TextEditingController();
 
@@ -41,7 +32,16 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
     selectedWeekdays = widget.product['available_days'] != null
         ? List<String>.from(widget.product['available_days'])
         : [];
-    _qytController.text = 1.toString();
+    _qytController.text = '1';
+  }
+
+  bool isBase64(String str) {
+    try {
+      base64Decode(str);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   void handleAddNewOrder() async {
@@ -52,10 +52,9 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');
 
-      final qyt = _qytController.text == ''
+      final qyt = _qytController.text.isEmpty
           ? '1'
-          : int.parse(_qytController.text) >
-                  int.parse(widget.product['quantity'])
+          : int.parse(_qytController.text) > int.parse(widget.product['quantity'])
               ? widget.product['quantity']
               : _qytController.text;
 
@@ -75,26 +74,25 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
           'Authorization': '$token',
         },
         body: jsonEncode(bodyData),
-      ); // Send a GET request to the API
-      final data = jsonDecode(response.body); // Decode the response
-      final status = data['status']; // Get the status from the response
-      // Check if the status is 200
+      );
+      final data = jsonDecode(response.body);
+      final status = data['status'];
+      
       if (status == 200) {
-        LoadingDialog.hide(context); // Hide the loading dialog
-        // Navigate to the Verification screen
+        LoadingDialog.hide(context);
         final order = data['data'];
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => UT_ProviderOrderStatus(
-                provider: widget.product,
-                status: 'success',
-                order: widget.product),
+              provider: widget.product,
+              status: 'success',
+              order: widget.product,
+            ),
           ),
         );
       } else {
-        // Show an error alert if the status is not 200
-        LoadingDialog.hide(context); // Hide the loading dialog
+        LoadingDialog.hide(context);
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
@@ -103,17 +101,19 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
           backgroundColor: Colors.black,
           titleColor: Colors.white,
           textColor: Colors.white,
-        ); // Show an error alert
+        );
       }
     } catch (e) {
-      // Show an error alert if an error occurs
-      LoadingDialog.hide(context); // Hide the loading dialog
-      debugPrint('Something went wrong $e'); // Print the error
+      LoadingDialog.hide(context);
+      debugPrint('Something went wrong $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -122,46 +122,42 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Request Tools', style: TextStyle(color: Colors.black)),
+        title: Text('Request Tools', style: TextStyle(color: Colors.black, fontSize: screenWidth * 0.05)),
         centerTitle: true,
         elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         child: SingleChildScrollView(
-          // Wrap the Column in SingleChildScrollView
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Service provider info
-              SizedBox(height: 15),
-              // Service name and description
-              Text("Tool: ${widget.product['title'] ?? 'Name'}",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  widget.product['image'] != null &&
-                          widget.product['image'].isNotEmpty
-                      ? Image.memory(
-                          base64Decode(widget.product['image']),
-                          height: 100, // Set a height for the image if needed
-                          width: 100, // Set a width for the image if needed
-                          fit: BoxFit.cover, // Adjust fit as needed
-                        )
-                      : Icon(Icons.image, size: 100), // Fallback icon
-                  SizedBox(height: 10),
-                ],
+              SizedBox(height: screenHeight * 0.02),
+              Text(
+                "Tool: ${widget.product['title'] ?? 'Name'}",
+                style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: screenHeight * 0.01),
+              Center(
+                child: widget.product['image'] != null && widget.product['image'].isNotEmpty && isBase64(widget.product['image'])
+                    ? Image.memory(
+                        base64Decode(widget.product['image']),
+                        height: screenWidth * 0.4,
+                        width: screenWidth * 0.4,
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(Icons.image, size: screenWidth * 0.4), // Fallback icon
+              ),
+              SizedBox(height: screenHeight * 0.02),
               Text(
                 "Availability: ${widget.product['availability'] ?? 'Available'}",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 15),
-              Text("Available Days:",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              SizedBox(height: screenHeight * 0.02),
+              Text(
+                "Available Days:",
+                style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
+              ),
               Wrap(
                 spacing: 8.0,
                 children: weekdays.map((day) {
@@ -172,22 +168,22 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
                   );
                 }).toList(),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: screenHeight * 0.02),
               Text(
-                "Amount: LKR ${widget.product['price'] ?? 'N/A'} for a tool",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                "Amount: LKR ${widget.product['price'] ?? 'N/A'} per tool",
+                style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: screenHeight * 0.01),
               Text(
-                "Avaialable QYT: ${widget.product['quantity'] ?? 'N/A'} ",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                "Available Quantity: ${widget.product['quantity'] ?? 'N/A'}",
+                style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: screenHeight * 0.02),
               Text(
                 "Enter the number of quantity you want to request",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: screenWidth * 0.045, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              SizedBox(height: screenHeight * 0.01),
               TextField(
                 keyboardType: TextInputType.number,
                 controller: _qytController,
@@ -197,33 +193,19 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
                   border: OutlineInputBorder(),
                 ),
               ),
-
-              SizedBox(height: 55),
-              // Action buttons
+              SizedBox(height: screenHeight * 0.05),
               Center(
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        _showConfirmAlert(
-                            widget.product['price'],
-                            _qytController.text == ''
-                                ? '1'
-                                : int.parse(_qytController.text) >
-                                        int.parse(widget.product['quantity'])
-                                    ? widget.product['quantity']
-                                    : _qytController.text);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.yellow,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                        textStyle: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                      child: Text('Request Now'),
-                    ),
-                  ],
+                child: ElevatedButton(
+                  onPressed: () {
+                    _showConfirmAlert(widget.product['price'], _qytController.text.isEmpty ? '1' : _qytController.text);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.yellow,
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1, vertical: 15),
+                    textStyle: TextStyle(fontSize: screenWidth * 0.045, color: Colors.white),
+                  ),
+                  child: Text('Request Now'),
                 ),
               ),
             ],
@@ -244,20 +226,20 @@ class _UT_ToolRequestState extends State<UT_ToolRequest> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Tool: ${widget.product['title'] ?? 'title'}'),
-              Text('Amount: LKR $price for $qyt qyt'),
+              Text('Amount: LKR $price for $qyt quantity'),
               Text('Total: LKR ${double.parse(price) * int.parse(qyt)}'),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop();
                 handleAddNewOrder();
               },
               style: ElevatedButton.styleFrom(
