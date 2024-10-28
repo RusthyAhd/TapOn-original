@@ -34,11 +34,10 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0 
   image_picker: ^0.8.7+3
   flutter_svg: ^2.0.10+1
-  google_places_autocomplete_text_field: ^0.1.0 
-
-
-  google_maps_flutter: ^2.9.0
   
+  
+  google_places_autocomplete_text_field: ^0.1.0 
+  google_maps_flutter: ^2.9.0
   flutter_rating_bar: ^4.0.1
   geolocator: ^9.0.2
   geocoding: ^2.0.4

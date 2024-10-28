@@ -41,12 +41,18 @@
     </array>
     
     <!-- Add these keys for location permissions -->
-    <key>NSLocationWhenInUseUsageDescription</key>
+<!--   <key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to your location for Google Maps functionality.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to your location even when it is running in the background.</string>
+	<string>This app needs access to your location even when it is running in the background.</string>--> 
 
-    
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show your current position.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to show your current position.</string>
+
+
+
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>We need access to your location to provide personalized experiences based on your position.</string>
     
