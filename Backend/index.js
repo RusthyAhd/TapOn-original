@@ -15,15 +15,19 @@ const ToolOrderRoute = require('./routes/ToolOrderRoutes');
 const ServiceRoute = require('./routes/ServiceRoutes');
 const ServiceOrderRoute = require('./routes/ServiceOrderRoutes');
 const {sentOTP} = require("./utils/OTPService");
-const {json, urlencoded} = require("body-parser");
+//const {json, urlencoded} = require("body-parser");
+const bodyParser = require('body-parser');
 
 
 // Initialize the express app
 const app = express();
 
-app.use(json());
-app.use(urlencoded({ extended: true }));
+// app.use(json());
+// app.use(urlencoded({ extended: true }));
 
+// Increase the JSON payload limit to 10 MB
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // Enable Mongoose debug mode to log all queries
 mongoose.set('debug', true);

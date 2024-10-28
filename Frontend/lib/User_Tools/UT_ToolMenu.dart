@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
@@ -9,7 +8,6 @@ import 'package:http/http.dart' as http;
 
 class UT_ToolMenu extends StatefulWidget {
   final String shopName; // Shop name to display relevant tools
-  //final List<Map<String, String>> products; // List of products in the shop
   final String shopId;
   final String shopEmail;
   final String shopPhone;
@@ -20,7 +18,6 @@ class UT_ToolMenu extends StatefulWidget {
     required this.shopId,
     required this.shopEmail,
     required this.shopPhone,
-    //required this.products
   });
 
   @override
@@ -43,19 +40,30 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
   Future<void> getAllTools() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      final baseURL = dotenv.env['BASE_URL']; // Get the base URL
-      final token =
-          prefs.getString('token'); // Get the token from shared preferences
+      final baseURL = dotenv.env['BASE_URL'];
+      final token = prefs.getString('token');
 
-      final response = await http
-          .get(Uri.parse('$baseURL/tool/get/all/${widget.shopId}'), headers: {
-        'Content-Type': 'application/json',
-        'Authorization': '$token',
-      }); // Send a POST request to the API
-      final data = jsonDecode(response.body); // Decode the response
-      final status = data['status']; // Get the status from the response
+      if (baseURL == null || token == null) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Configuration Error',
+          text: 'Please check your configuration and try again.',
+        );
+        return;
+      }
 
-      if (status == 200) {
+      final response = await http.get(
+        Uri.parse('$baseURL/tool/get/all/${widget.shopId}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (data['status'] == 200) {
         final tools = data['data'];
         setState(() {
           products.clear();
@@ -73,17 +81,20 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
             });
           }
         });
+      } else {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'Failed to load tools. Please try again.',
+        );
       }
     } catch (e) {
-      print(e);
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
         title: 'Oops...',
         text: 'An error occurred. Please try again.',
-        backgroundColor: Colors.black,
-        titleColor: Colors.white,
-        textColor: Colors.white,
       );
     }
   }
@@ -100,7 +111,6 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
         backgroundColor: Colors.orangeAccent,
       ),
       body: Container(
-        // Add gradient background
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.orangeAccent, Colors.yellow[700]!],
@@ -112,20 +122,20 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              // List of items specific to this shop
               Expanded(
                 child: ListView.builder(
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     final product = products[index];
                     return productTile(
-                        context,
-                        product['title']!,
-                        product['price']!,
-                        product['image']!,
-                        product['description']!,
-                        widget.shopEmail,
-                        product);
+                      context,
+                      product['title']!,
+                      product['price']!,
+                      product['image']!,
+                      product['description']!,
+                      widget.shopEmail,
+                      product,
+                    );
                   },
                 ),
               ),
@@ -144,24 +154,29 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
       String description,
       String shopEmail,
       Map<String, dynamic> product) {
+    // Ensure the base64 string length is a multiple of 4
+    String formattedImage = image;
+    if (formattedImage.length % 4 != 0) {
+      formattedImage += '=' * (4 - (formattedImage.length % 4));
+    }
+
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15), // Rounded corners for the card
+        borderRadius: BorderRadius.circular(15),
       ),
-      elevation: 5, // Add shadow to the card for a raised effect
+      elevation: 5,
       margin: EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
-        contentPadding: EdgeInsets.all(12), // Add more padding inside the tile
+        contentPadding: EdgeInsets.all(12),
         leading: Hero(
-          // Hero animation for smooth image transition
-          tag: title, // Ensure tag is unique for each product
+          tag: title,
           child: Image(
             image: MemoryImage(
-              base64Decode(image),
+              base64Decode(formattedImage),
             ),
-            height: 100, // Set a height for the image if needed
-            width: 100, // Set a width for the image if needed
-            fit: BoxFit.cover, // Adjust fit as needed
+            height: 100,
+            width: 100,
+            fit: BoxFit.cover,
           ),
         ),
         title: Text(
@@ -182,18 +197,18 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
         ),
         trailing: Icon(Icons.arrow_forward_ios, color: Colors.black),
         onTap: () {
-          // Navigate to ProductDetailsPage with product details
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => UT_ToolDetails(
-                  title: title,
-                  price: price,
-                  image: image,
-                  description: description,
-                  shopEmail: shopEmail,
-                  product: product,
-                  shopPhone: widget.shopPhone),
+              builder: (context) => ToolDetails(
+                title: title,
+                price: price,
+                image: image,
+                description: description,
+                shopEmail: shopEmail,
+                product: product,
+                shopPhone: widget.shopPhone,
+              ),
             ),
           );
         },

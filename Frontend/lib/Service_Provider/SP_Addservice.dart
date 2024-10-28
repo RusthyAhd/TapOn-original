@@ -95,6 +95,10 @@ class _SP_AddserviceState extends State<SP_Addservice> {
   TextEditingController timeDurationController = TextEditingController();
 
   void handleSaveService() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
     // Save the service details
     LoadingDialog.show(context); // Show loading dialog
     try {
@@ -135,7 +139,8 @@ class _SP_AddserviceState extends State<SP_Addservice> {
                 'Authorization': '$token',
               },
               body: json.encode(serviceData)); // Send a POST request to the API
-      final data = jsonDecode(response.body); // Decode the response
+      final data = jsonDecode(response.body);
+      print('Response: ${response.body}'); // Decode the response
       final status = data['status']; // Get the status from the response
 
       if (status == 200) {
