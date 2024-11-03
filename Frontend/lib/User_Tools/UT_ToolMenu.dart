@@ -174,8 +174,8 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
             image: MemoryImage(
               base64Decode(formattedImage),
             ),
-            height: 100,
-            width: 100,
+            height: 60,
+            width: 60,
             fit: BoxFit.cover,
           ),
         ),
