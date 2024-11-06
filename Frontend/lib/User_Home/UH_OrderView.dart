@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class UH_OrderView extends StatefulWidget {
   final Map<String, dynamic> order;
-  const UH_OrderView({
+  const UH_OrderView({super.key, 
     required this.order,
   });
 
@@ -19,7 +19,7 @@ class UH_OrderView extends StatefulWidget {
 }
 
 class _UH_OrderViewState extends State<UH_OrderView> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);

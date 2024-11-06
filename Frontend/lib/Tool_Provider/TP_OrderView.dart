@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class TP_OrderView extends StatefulWidget {
   final Map<String, dynamic> order;
-  const TP_OrderView({
+  const TP_OrderView({super.key, 
     required this.order,
   });
 
@@ -20,7 +20,7 @@ class TP_OrderView extends StatefulWidget {
 }
 
 class _TP_OrderViewState extends State<TP_OrderView> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);

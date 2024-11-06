@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:tap_on/Home%20page.dart';
 import 'package:tap_on/User_Tools/UT_NearbyShops.dart';
-import 'package:latlong2/latlong.dart' as latlong;
 import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
 
 class UT_Location extends StatefulWidget {
   final String tool;
-  UT_Location({required this.tool});
+  const UT_Location({super.key, required this.tool});
 
   @override
   _UT_LocationState createState() => _UT_LocationState();

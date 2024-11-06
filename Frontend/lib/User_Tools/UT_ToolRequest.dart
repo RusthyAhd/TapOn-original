@@ -12,7 +12,7 @@ class UT_ToolRequest extends StatefulWidget {
   final Map<String, dynamic> product;
   final String shopEmail;
   
-  const UT_ToolRequest({
+  const UT_ToolRequest({super.key, 
     required this.product,
     required this.shopEmail,
   });
@@ -24,7 +24,7 @@ class UT_ToolRequest extends StatefulWidget {
 class _UT_ToolRequestState extends State<UT_ToolRequest> {
   final List<String> weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   List<String> selectedWeekdays = [];
-  TextEditingController _qytController = TextEditingController();
+  final TextEditingController _qytController = TextEditingController();
 
   @override
   void initState() {

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:location/location.dart' as loc;
 import 'package:tap_on/Home%20page.dart';
 import 'package:tap_on/User_Service/US_NearbyService.dart';
-import 'package:latlong2/latlong.dart' as latlong;
 import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class US_Location extends StatefulWidget {
   final String category;
 
-  US_Location({required this.category});
+  const US_Location({super.key, required this.category});
 
   @override
   _US_LocationState createState() => _US_LocationState();

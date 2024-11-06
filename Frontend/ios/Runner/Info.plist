@@ -52,6 +52,8 @@
     
     <key>io.flutter.embedded_views_preview</key>
     <true/>
+    <key>GMSApiKey</key>
+    <string>AIzaSyBzHQWn9DQ9ipSJRLAETup1MVBRVTkq-7s</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

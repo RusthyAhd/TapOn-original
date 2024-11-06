@@ -13,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SP_AcceptedOrder extends StatefulWidget {
   final Map<String, dynamic> order;
   final String status;
-  const SP_AcceptedOrder({
+  const SP_AcceptedOrder({super.key, 
     required this.order,
     required this.status,
   });
@@ -23,7 +23,7 @@ class SP_AcceptedOrder extends StatefulWidget {
 }
 
 class _SP_AcceptedOrderState extends State<SP_AcceptedOrder> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);

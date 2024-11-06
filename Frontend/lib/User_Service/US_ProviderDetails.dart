@@ -6,7 +6,7 @@ import 'package:tap_on/User_Service/US_PreBooking.dart';
 
 class US_ProviderDetails extends StatelessWidget {
   final Map<String, dynamic> provider;
-  const US_ProviderDetails({
+  const US_ProviderDetails({super.key, 
     required this.provider,
   });
 
@@ -79,7 +79,7 @@ class US_ProviderDetails extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             Column(
-              children: [
+              children: const [
                 ReviewCard(),
                 SizedBox(height: 8),
                 ReviewCard(),

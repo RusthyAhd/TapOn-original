@@ -14,7 +14,6 @@ import 'package:tap_on/Service_Provider/SP_History.dart';
 import 'package:tap_on/Service_Provider/SP_Notification.dart';
 import 'package:tap_on/Service_Provider/SP_Profile.dart';
 import 'package:tap_on/Service_Provider/SP_Servicemanager.dart';
-import 'package:tap_on/widgets/Loading.dart';
 import 'package:http/http.dart' as http;
 
 class SP_Dashboard extends StatefulWidget {

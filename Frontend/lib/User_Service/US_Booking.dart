@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tap_on/User_Service/US_PreBooking.dart';
 import 'package:tap_on/User_Service/US_ProviderOrderStatus.dart';
 import 'package:tap_on/widgets/Loading.dart';
 import 'package:http/http.dart' as http;
 
 class US_Booking extends StatefulWidget {
   final Map<String, dynamic> provider;
-  const US_Booking({
+  const US_Booking({super.key, 
     required this.provider,
   });
 
@@ -30,7 +29,7 @@ class _US_BookingState extends State<US_Booking> {
     'Sunday'
   ];
   List<String> selectedWeekdays = [];
-  TextEditingController _dayController = TextEditingController();
+  final TextEditingController _dayController = TextEditingController();
 
   @override
   void initState() {

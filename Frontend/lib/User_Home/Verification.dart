@@ -11,7 +11,7 @@ import 'package:tap_on/widgets/Loading.dart';
 
 class Verification extends StatefulWidget {
   final String phoneNumber;
-  Verification({
+  const Verification({super.key, 
     required this.phoneNumber,
   });
 

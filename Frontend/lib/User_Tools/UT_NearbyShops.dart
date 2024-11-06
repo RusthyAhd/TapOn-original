@@ -10,14 +10,12 @@ import 'package:tap_on/Home%20page.dart';
 import 'package:tap_on/User_Tools/UT_ToolMenu.dart';
 import 'package:http/http.dart' as http;
 import 'package:tap_on/services/geo_services.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart' as latlong;
 import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
 
 class UT_NearbyShops extends StatefulWidget {
   final String userLocation;
   final String tool;
-  UT_NearbyShops({
+  const UT_NearbyShops({super.key, 
     required this.userLocation,
     required this.tool,
   });

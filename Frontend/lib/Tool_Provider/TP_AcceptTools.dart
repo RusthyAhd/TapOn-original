@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tap_on/Service_Provider/SP_Dashboard.dart';
 import 'package:tap_on/Tool_Provider/TP_Dashboard.dart';
 import 'package:tap_on/services/geo_services.dart';
 import 'package:tap_on/widgets/Loading.dart';
@@ -14,7 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 class TP_AcceptTools extends StatefulWidget {
   final Map<String, dynamic> order;
   final String status;
-  const TP_AcceptTools({
+  const TP_AcceptTools({super.key, 
     required this.order,
     required this.status,
   });
@@ -24,7 +23,7 @@ class TP_AcceptTools extends StatefulWidget {
 }
 
 class _TP_AcceptToolsState extends State<TP_AcceptTools> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);

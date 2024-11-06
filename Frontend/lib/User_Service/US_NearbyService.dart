@@ -1,24 +1,18 @@
-//showprovider.dart
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tap_on/User_Service/US_Location.dart';
 import 'package:tap_on/User_Service/US_ProviderDetails.dart';
 import 'package:http/http.dart' as http;
 import 'package:tap_on/services/geo_services.dart';
-import 'package:latlong2/latlong.dart' as latlong;
-import 'package:flutter_map/flutter_map.dart' as flutter_map_lib;
-import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class US_NearbyService extends StatefulWidget {
   final String userLocation;
   final String category;
-  US_NearbyService({required this.userLocation, required this.category});
+  const US_NearbyService({super.key, required this.userLocation, required this.category});
 
   @override
   State<US_NearbyService> createState() => _US_NearbyServiceState();
@@ -28,39 +22,8 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
   double _latitude = 6.9271;
   double _longitude = 79.8612;
   late GoogleMapController mapController;
-  final Set<google_maps.Marker> _markers = {};
-  final List<Map<String, dynamic>> serviceProviders = [
-    // {
-    //   'name': 'Mohammed Rishaf',
-    //   'district': 'Trincomalee',
-    //   'distance': '1.5km',
-    //   'rating': 4.9,
-    //   'service': 'General',
-    //   'consultant fee': "Rs.300.00",
-    //   'amount per day': 'Rs.1000.00',
-    //   'image': 'assets/mohammed.jpg',
-    // },
-    // {
-    //   'name': 'Hamthy',
-    //   'district': 'Nuwara Eliya',
-    //   'distance': '1.7km',
-    //   'rating': 4.9,
-    //   'service': 'Electrical',
-    //   'consultant fee': "free",
-    //   'amount per day': 'Rs.1000.00',
-    //   'image': 'assets/annette.jpg',
-    // },
-    // {
-    //   'name': 'Riyas',
-    //   'district': 'Nuwara Eliya',
-    //   'distance': '2.3km',
-    //   'rating': 4.5,
-    //   'service': 'Plumbing',
-    //   'consultant fee': "Rs.300.00",
-    //   'amount per day': 'Rs.700.00',
-    //   'image': 'assets/guy.jpg',
-    // },
-  ];
+  final Set<Marker> _markers = {};
+  final List<Map<String, dynamic>> serviceProviders = [];
 
   @override
   void initState() {
@@ -75,17 +38,10 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
   Future<void> getAllService() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      final baseURL = dotenv.env['BASE_URL']; // Get the base URL
-      final token =
-          prefs.getString('token'); // Get the token from shared preferences
+      final baseURL = dotenv.env['BASE_URL'];
+      final token = prefs.getString('token');
 
       final coordinates = await getCoordinatesFromCity(widget.userLocation);
-
-      final bodyData = {
-        "location_long": coordinates['longitude'],
-        "location_lat": coordinates['latitude'],
-        'service_category': widget.category,
-      };
 
       setState(() {
         _latitude = coordinates['latitude'] ?? 6.9271;
@@ -98,20 +54,26 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
           'Content-Type': 'application/json',
           'Authorization': '$token',
         },
-        body: jsonEncode(bodyData),
-      ); // Send a POST request to the API
-      final data = jsonDecode(response.body); // Decode the response
-      final status = data['status']; // Get the status from the response
+        body: jsonEncode({
+          "location_long": coordinates['longitude'],
+          "location_lat": coordinates['latitude'],
+          'service_category': widget.category,
+        }),
+      );
 
-      if (status == 200) {
+      final data = jsonDecode(response.body);
+      
+      if (data['status'] == 200) {
         final services = data['data'];
         if (services.length > 0) {
           List<Map<String, dynamic>> newProviders = [];
-          Set<google_maps.Marker> providerMarkers = {};
+          Set<Marker> providerMarkers = {};
+
           for (var service in services) {
             final lat = service['location_lat'];
             final long = service['location_long'];
             final serviceCity = await getCityFromCoordinates(lat, long);
+
             newProviders.add({
               'name': service['name'] ?? 'N/A',
               'district': serviceCity,
@@ -128,20 +90,18 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
               "service_id": service['service_id'] ?? 'N/A',
               "description": service['description'] ?? 'N/A',
             });
-            if (service['location_lat'] == null ||
-                service['location_long'] == null) {
-              continue;
+
+            if (lat != null && long != null) {
+              providerMarkers.add(
+                Marker(
+                  markerId: MarkerId(service['shop_name'] ?? 'N/A'),
+                  position: LatLng(lat, long),
+                  infoWindow: InfoWindow(title: service['shop_name'] ?? 'N/A'),
+                ),
+              );
             }
-            providerMarkers.add(
-              google_maps.Marker(
-                markerId: google_maps.MarkerId(service['shop_name'] ?? 'N/A'),
-                position: google_maps.LatLng(
-                    service['location_lat'], service['location_long']),
-                infoWindow: google_maps.InfoWindow(
-                    title: service['shop_name'] ?? 'N/A'),
-              ),
-            );
           }
+
           setState(() {
             serviceProviders.clear();
             serviceProviders.addAll(newProviders);
@@ -153,15 +113,38 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
     } catch (e) {
       print(e);
       QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Oops...',
-        text: 'An error occurred. Please try again.',
-        backgroundColor: Colors.black,
-        titleColor: Colors.white,
-        textColor: Colors.white,
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Location Error',
+      text: 'Unable to fetch location. Using default coordinates.',
+      backgroundColor: Colors.black,
+      titleColor: Colors.white,
+      textColor: Colors.white,
       );
     }
+  }
+
+  Widget _buildProviderInfo(String label, String value) {
+    return RichText(
+      text: TextSpan(
+        text: '$label: ',
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+        ),
+        children: [
+          TextSpan(
+            text: value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+              color: Color.fromARGB(255, 3, 112, 207),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -171,30 +154,23 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
       appBar: AppBar(
         backgroundColor: Colors.yellow[700],
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => US_Location(category: widget.category)),
-            );
-            // Action when the button is pressed
-          },
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => US_Location(category: widget.category)),
+          ),
         ),
-        title: Text('Nearby Service Providers',
-            style: TextStyle(color: Colors.black)),
+        title: const Text('Nearby Service Providers', style: TextStyle(color: Colors.black)),
         centerTitle: true,
         elevation: 0,
       ),
       body: Column(
         children: [
-          // Map Placeholder
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             height: 250,
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [
                 BoxShadow(
@@ -203,127 +179,65 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
                   offset: Offset(0, 5),
                 )
               ],
-              border:
-                  Border.all(color: Colors.white.withOpacity(0.4), width: 1),
             ),
-            child: Expanded(
-              child: Stack(
-                children: [
-                  GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: LatLng(_latitude, _longitude),
-                      zoom: 13,
-                    ),
-                    onMapCreated: (GoogleMapController controller) {
-                      mapController = controller;
-                    },
-                    markers: _markers,
-                  ),
-                ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(_latitude, _longitude),
+                  zoom: 13,
+                ),
+                onMapCreated: (GoogleMapController controller) {
+                  mapController = controller;
+                },
+                markers: _markers,
               ),
             ),
           ),
-
-          // List of Service Providers
           Expanded(
             child: ListView.builder(
               itemCount: serviceProviders.length,
               itemBuilder: (context, index) {
                 final provider = serviceProviders[index];
                 return Card(
-                  margin: EdgeInsets.all(10),
+                  margin: const EdgeInsets.all(10),
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: MemoryImage(
-                        base64Decode(provider['image']),
-                      ),
+                      backgroundImage: provider['image'] != 'N/A' 
+                          ? MemoryImage(base64Decode(provider['image']))
+                          : null,
+                      child: provider['image'] == 'N/A' 
+                          ? const Icon(Icons.person)
+                          : null,
                     ),
-                    title: Text(provider['name'],
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(
+                      provider['name'],
+                      style: const TextStyle(fontWeight: FontWeight.bold)
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'District: ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: provider['district'] ?? 'N/A',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: const Color.fromARGB(255, 3, 112, 207),
-                                ),
-                              ),
-                            ],
-                          ),
+                        _buildProviderInfo('District', provider['district'] ?? 'N/A'),
+                        _buildProviderInfo('Consultant Fee', provider['consultantFee'].toString()),
+                        _buildProviderInfo('Amount Per Day', provider['amountPerDay'].toString()),
+                        Text(
+                          'Rating: ${provider['rating'].toString()}',
+                          style: const TextStyle(fontWeight: FontWeight.bold)
                         ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Consultant Fee: ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: provider['consultantFee'].toString() ??
-                                    'N/A',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: const Color.fromARGB(255, 3, 112, 207),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Amount Per Day: ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: provider['amountPerDay'].toString() ??
-                                    'N/A',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: const Color.fromARGB(255, 3, 112, 207),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text('Rating: ${provider['rating'].toString()}',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
                       ],
                     ),
                     trailing: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  US_ProviderDetails(provider: provider)),
-                        );
-                        // Action when the button is pressed
-                      },
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => US_ProviderDetails(provider: provider)
+                        ),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         foregroundColor: Colors.yellow,
                       ),
-                      child: Text('Choose'),
+                      child: const Text('Choose'),
                     ),
                   ),
                 );
