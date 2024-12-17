@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
@@ -8,10 +7,13 @@ import 'package:tap_on/Home%20page.dart';
 import 'package:tap_on/User_Home/EnterNumber.dart';
 import 'package:http/http.dart' as http;
 import 'package:tap_on/widgets/Loading.dart';
+import 'dart:async';
+
 
 class Verification extends StatefulWidget {
   final String phoneNumber;
-  Verification({
+  const Verification({
+    super.key,
     required this.phoneNumber,
   });
 
@@ -26,10 +28,34 @@ class _VerificationState extends State<Verification> {
 
   // List of FocusNodes for the 6 text fields
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+  final List<Color> gradientColors = [
+    Colors.orange.shade300,
+    Colors.orange.shade400,
+    Colors.orange.shade500,
+    Colors.orange.shade600,
+    Colors.amber.shade700,
+  ];
+
+  Timer? _timer;
+  int colorIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    startGradientAnimation();
+  }
+
+  void startGradientAnimation() {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      setState(() {
+        colorIndex = (colorIndex + 1) % gradientColors.length;
+      });
+    });
+  }
 
   @override
   void dispose() {
-    // Dispose the controllers and focus nodes
+    _timer?.cancel();
     for (var controller in _controllers) {
       controller.dispose();
     }
@@ -112,97 +138,118 @@ class _VerificationState extends State<Verification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFC342),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Enter SMS Code',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              gradientColors[colorIndex],
+              gradientColors[(colorIndex + 1) % gradientColors.length]
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Enter SMS Code',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(6, (index) {
-                return Container(
-                  width: 50,
-                  height: 50,
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  child: TextField(
-                    controller: _controllers[index],
-                    focusNode: _focusNodes[index],
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 20),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(6, (index) {
+                  return Container(
+                    width: 50,
+                    height: 50,
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: TextField(
+                      controller: _controllers[index],
+                      focusNode: _focusNodes[index],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        counterText: '', // Removes character counter
                       ),
-                      counterText: '', // Removes character counter
+                      keyboardType: TextInputType.number,
+                      maxLength: 1,
+                      onChanged: (value) {
+                        if (value.isNotEmpty && index < 5) {
+                          // Move to the next field if the current one is filled
+                          FocusScope.of(context)
+                              .requestFocus(_focusNodes[index + 1]);
+                        } else if (value.isEmpty && index > 0) {
+                          // Move to the previous field if the current one is cleared
+                          FocusScope.of(context)
+                              .requestFocus(_focusNodes[index - 1]);
+                        }
+                      },
                     ),
-                    keyboardType: TextInputType.number,
-                    maxLength: 1,
-                    onChanged: (value) {
-                      if (value.isNotEmpty && index < 5) {
-                        // Move to the next field if the current one is filled
-                        FocusScope.of(context)
-                            .requestFocus(_focusNodes[index + 1]);
-                      } else if (value.isEmpty && index > 0) {
-                        // Move to the previous field if the current one is cleared
-                        FocusScope.of(context)
-                            .requestFocus(_focusNodes[index - 1]);
-                      }
+                  );
+                }),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EnterNumber()));
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white, // Button color
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text('Resend Code'),
                   ),
-                );
-              }),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EnterNumber()));
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 30),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      handleVerifyOTP();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white, // Button color
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 15,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: const Text('Confirm'),
                   ),
-                  child: const Text('Resend Code'),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    handleVerifyOTP();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 30),
-                  ),
-                  child: const Text('Confirm'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'You should receive the code shortly',
-              style: TextStyle(color: Colors.black),
-            ),
-          ],
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'You should receive the code shortly',
+                style: TextStyle(color: Colors.black),
+              ),
+            ],
+          ),
         ),
       ),
     );

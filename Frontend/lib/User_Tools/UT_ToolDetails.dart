@@ -13,7 +13,7 @@ class ToolDetails extends StatelessWidget {
   final String shopEmail;
   final dynamic product; // Adjust type if product has a specific class type
 
-  ToolDetails({
+  const ToolDetails({super.key, 
     required this.title,
     required this.image,
     required this.price,
@@ -70,7 +70,7 @@ class ToolDetails extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16),
-                Container(
+                SizedBox(
                   width: screenWidth,
                 child: Card(
                   shape: RoundedRectangleBorder(

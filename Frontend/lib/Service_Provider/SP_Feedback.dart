@@ -1,7 +1,41 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class SP_Feedback extends StatelessWidget {
+class SP_Feedback extends StatefulWidget {
   const SP_Feedback({super.key});
+
+  @override
+  _SP_FeedbackState createState() => _SP_FeedbackState();
+}
+
+class _SP_FeedbackState extends State<SP_Feedback> {
+  List<dynamic> feedbackList = [];
+  double averageRating = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchFeedback();
+  }
+
+  Future<void> fetchFeedback() async {
+    final response = await http.get(Uri.parse('http://localhost:3000/api/v1/feedback'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> feedbacks = jsonDecode(response.body);
+      setState(() {
+        feedbackList = feedbacks;
+        averageRating = feedbacks.isNotEmpty
+            ? feedbacks.map((f) => f['rating']).reduce((a, b) => a + b) / feedbacks.length
+            : 0.0;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to load feedback")),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +52,17 @@ class SP_Feedback extends StatelessWidget {
             // Overall rating
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
-                  '4.0',
+                  averageRating.toStringAsFixed(1),
                   style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    StarDisplay(value: 4), // Star rating display
-                    Text('based on 23 reviews'),
+                    StarDisplay(value: averageRating.round()), // Star rating display
+                    Text('based on ${feedbackList.length} reviews'),
                   ],
                 ),
               ],
@@ -42,31 +76,21 @@ class SP_Feedback extends StatelessWidget {
 
             // Review list
             Expanded(
-              child: ListView(
-                children: [
-                  _buildReview(
-                    'Mohamme Rishaf',
-                    'This chair is a great addition for any room in your home, not only just the living room. Featuring a mid-century design with modern available on the market. However, and with that said, if you are like most people in the market, it is just perfect!',
-                    5,
-                    '1 days ago',
-                  ),
-                  _buildReview(
-                    'Frank Garrett',
-                    'Suspendisse potenti. Nullam tincidunt lacus tellus, aliquam est vehicula a. Pellentesque consectetur condimentum nulla, eleifend condimentum purus.',
-                    4,
-                    '4 days ago',
-                  ),
-                  _buildReview(
-                    'Randy Palmer',
-                    'Aenean ante nisi, gravida non mattis semper, varius et magna. Donec ultricies vulputate arcu, vel commodo eros pellentesque sed. In id tortor gravida orci consequat viverra.',
-                    4,
-                    '1 month ago',
-                  ),
-                ],
+              child: ListView.builder(
+                itemCount: feedbackList.length,
+                itemBuilder: (context, index) {
+                  final feedback = feedbackList[index];
+                  return _buildReview(
+                    feedback['name'],
+                    feedback['comment'],
+                    feedback['rating'],
+                    feedback['createdAt'],
+                  );
+                },
               ),
             ),
 
-            // Write a review button
+           
           ],
         ),
       ),
@@ -74,20 +98,23 @@ class SP_Feedback extends StatelessWidget {
   }
 
   Widget _buildRatingDistribution() {
+    final ratingCounts = List.generate(5, (index) => 0);
+    for (var feedback in feedbackList) {
+      ratingCounts[feedback['rating'] - 1]++;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildRatingRow('Excellent', 5, Colors.green, 0.6),
-        _buildRatingRow('Good', 4, Colors.greenAccent, 0.3),
-        _buildRatingRow('Average', 3, Colors.yellow, 0.2),
-        _buildRatingRow('Below Average', 2, Colors.orange, 0.1),
-        _buildRatingRow('Poor', 1, Colors.red, 0.05),
-      ],
+      children: List.generate(5, (index) {
+        final label = ['Excellent', 'Good', 'Average', 'Below Average', 'Poor'][index];
+        final color = [Colors.green, Colors.greenAccent, Colors.yellow, Colors.orange, Colors.red][index];
+        final widthFactor = feedbackList.isNotEmpty ? ratingCounts[index] / feedbackList.length : 0.0;
+        return _buildRatingRow(label, 5 - index, color, widthFactor);
+      }),
     );
   }
 
-  Widget _buildRatingRow(
-      String label, int stars, Color color, double widthFactor) {
+  Widget _buildRatingRow(String label, int stars, Color color, double widthFactor) {
     return Row(
       children: [
         Text(label),

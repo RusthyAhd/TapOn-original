@@ -18,11 +18,11 @@ class UH_Profile extends StatefulWidget {
 
 class _UH_ProfileState extends State<UH_Profile> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   String fullName = '';
   String phoneNumber = '';
   String email = '';

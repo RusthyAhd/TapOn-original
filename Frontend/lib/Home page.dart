@@ -18,7 +18,10 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TapOn'),
+        title: const Text('TapOn', style: TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 22,
+    ),),
         backgroundColor: Colors.amber[700],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -42,18 +45,27 @@ class HomePage extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(height: 20),
-          ListTile(
-            leading: const CircleAvatar(
-              // backgroundImage: AssetImage(
-              //     'assets/profile.jpg'), // Replace with profile image
-              child: Icon(Icons.person),
-            ),
-            title: TextButton(
+                    ListTile(
+            leading: IconButton(
+              icon: const CircleAvatar(
+                child: Icon(Icons.person,size: 30),
+                  backgroundColor: Color.fromARGB(255, 243, 177, 33),
+              ),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => UH_Profile()));
               },
-              child: const Text("Profile"), // Add text to the button
+            ),
+            title: const Text(
+              "Profile",
+              style: TextStyle(
+                fontSize: 14.0, // Adjust font size to your preference
+                fontWeight: FontWeight
+                    .bold, // Change to FontWeight.normal for regular weight
+                color: Color.fromARGB(255, 3, 23, 39), // Set the text color to match your theme
+                letterSpacing: 1.2,
+              ),
+              textAlign:TextAlign.left
             ),
             trailing: IconButton(
               icon: const Icon(Icons.support_agent),
@@ -78,7 +90,16 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 10),
           Expanded(
             child: Container(
-              color: const Color.fromARGB(255, 233, 231, 207),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 245, 236, 137), // Starting color
+                    Color.fromARGB(255, 230, 170, 42), // Ending color (adjust as needed)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               child: GridView.count(
                 crossAxisCount: 3,
                 padding: const EdgeInsets.all(10.0),
@@ -86,8 +107,8 @@ class HomePage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 children: [
                   ServiceCard(
-                    icon: Icons.plumbing,
                     label: 'Plumber',
+                    imagePath: 'assets/images/Plumber.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -98,8 +119,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.electrical_services,
                     label: 'Electrician',
+                    imagePath: 'assets/images/electrician.jpeg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -110,8 +131,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.construction,
                     label: 'Carpenter',
+                    imagePath: 'assets/images/carpenter.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -122,8 +143,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.format_paint,
                     label: 'Painter',
+                    imagePath: 'assets/images/painter.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -134,8 +155,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.grass,
                     label: 'Gardener',
+                    imagePath: 'assets/images/gardener.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -146,8 +167,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.kitchen,
                     label: 'Fridge Repair',
+                    imagePath: 'assets/images/repairer.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -158,8 +179,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.build,
                     label: 'Beauty Professional',
+                    imagePath: 'assets/images/beautician.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -170,8 +191,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.phone_android,
                     label: 'Phone Repair',
+                    imagePath: 'assets/images/repairer.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -182,8 +203,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.content_cut,
                     label: 'Other',
+                    imagePath: 'assets/images/other.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -208,7 +229,16 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 10),
           Expanded(
             child: Container(
-              color: const Color.fromARGB(255, 233, 231, 207),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 230, 170, 42), // Starting color
+                     Color.fromARGB(255, 231, 196, 121), // Ending color (adjust as needed)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
               child: GridView.count(
                 crossAxisCount: 3,
                 padding: const EdgeInsets.all(10.0),
@@ -216,8 +246,8 @@ class HomePage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 children: [
                   ServiceCard(
-                    icon: Icons.plumbing,
                     label: 'Plumbing Tools',
+                    imagePath: 'assets/images/plumbingt.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -228,8 +258,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.electrical_services,
                     label: 'Electrical Tools',
+                    imagePath: 'assets/images/electrotool.png',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -240,8 +270,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.construction,
                     label: 'Carpenting Tools',
+                    imagePath: 'assets/images/carpenter.png',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -252,8 +282,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.format_paint,
                     label: 'Painting Tools',
+                    imagePath: 'assets/images/painttool.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -264,8 +294,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.grass,
                     label: 'Gardening Tools',
+                    imagePath: 'assets/images/gardeningt.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -276,8 +306,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.kitchen,
                     label: 'Repairing Tools',
+                    imagePath: 'assets/images/repairt.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -288,8 +318,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.build,
                     label: 'Building Tools',
+                    imagePath: 'assets/images/othertool.webp',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -300,8 +330,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.phone_android,
                     label: 'Phone Accessories',
+                    imagePath: 'assets/images/phonet.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -312,8 +342,8 @@ class HomePage extends StatelessWidget {
                     },
                   ),
                   ServiceCard(
-                    icon: Icons.content_cut,
                     label: 'Other',
+                    imagePath: 'assets/images/beautyt.jpg',
                     onTap: () {
                       Navigator.push(
                         context,
@@ -398,29 +428,68 @@ class HomePage extends StatelessWidget {
 }
 
 class ServiceCard extends StatelessWidget {
-  final IconData icon;
   final String label;
+  final String? imagePath;
+  final String? imageUrl;
   final VoidCallback onTap;
 
-  const ServiceCard(
-      {super.key,
-      required this.icon,
-      required this.label,
-      required this.onTap});
+  const ServiceCard({
+    required this.label,
+    required this.onTap,
+    this.imagePath,
+    this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Card(
-        color: const Color.fromARGB(255, 250, 184, 78),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 40, color: Colors.blue),
-            const SizedBox(height: 10),
-            Text(label, textAlign: TextAlign.center),
-          ],
+      child: AnimatedScale(
+        scale: 0.95, // Reduce scale on tap for a "click" effect
+        duration: const Duration(milliseconds: 200),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(20),
+            onTap: onTap,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: imagePath != null
+                      ? AssetImage(imagePath!) as ImageProvider
+                      : NetworkImage(imageUrl!),
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0.1, 0.9],
+                    colors: [
+                      Colors.black.withOpacity(0.6),
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+                alignment: Alignment.bottomCenter,
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

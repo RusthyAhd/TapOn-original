@@ -1,6 +1,6 @@
+//entry point to backend
 const dotenv = require('dotenv')
 dotenv.config();
-
 const express = require('express');
 const mongoose = require('mongoose');
 const CustomResponse = require('./utils/custom.response');
@@ -14,9 +14,10 @@ const ToolRoute = require('./routes/ToolRoutes');
 const ToolOrderRoute = require('./routes/ToolOrderRoutes');
 const ServiceRoute = require('./routes/ServiceRoutes');
 const ServiceOrderRoute = require('./routes/ServiceOrderRoutes');
+const FeedbackRouter = require('./routes/FeedbackRoutes');
 const {sentOTP} = require("./utils/OTPService");
 //const {json, urlencoded} = require("body-parser");
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser');// handle JSON
 
 
 // Initialize the express app
@@ -25,21 +26,22 @@ const app = express();
 // app.use(json());
 // app.use(urlencoded({ extended: true }));
 
-// Increase the JSON payload limit to 10 MB
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
-// Enable Mongoose debug mode to log all queries
+
+app.use(bodyParser.json({ limit: '10mb' }));//parse json data
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));//parse urlencoded data
+
+// Enable Mongoose debug mode 
+
 mongoose.set('debug', false);
 
-// Connect to MongoDB
+// Connect to MongoDB using string
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB Successfully Connected with TapOn-DB'))
     .catch(error => {
         console.error('MongoDB Connection Error:', error.message);
     });
- 
-// Health check route to verify MongoDB connectivity
+
 app.get('/serviceregistration', async (req, res) => {
     try {
         const test = await mongoose.connection.db.admin().ping(); // Check MongoDB connectivity
@@ -79,6 +81,7 @@ app.use('/api/v1/tool',ToolRoute)
 app.use('/api/v1/to',ToolOrderRoute)
 app.use('/api/v1/service',ServiceRoute)
 app.use('/api/v1/so',ServiceOrderRoute)
+app.use('/api/v1/feedback', FeedbackRouter); 
 
 // this should always be the end of the routs
 //this is for unhandled routes

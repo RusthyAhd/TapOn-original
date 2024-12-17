@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
@@ -15,8 +14,7 @@ class SP_History extends StatefulWidget {
 
 class _SP_HistoryState extends State<SP_History> {
   String selectedDateFilter = 'Date'; // To store the selected date filter
-  String orderIdFilter = '';
-  // List of all orders. You can add new orders to this list dynamically.
+  String orderIdFilter = '';// List of all orders. You can add new orders to this list dynamically.
   List<Map<String, dynamic>> allOrders = [
     // {
     //   'status': 'COMPLETED',
@@ -26,15 +24,6 @@ class _SP_HistoryState extends State<SP_History> {
     //   'ordername': 'Homemaitanance',
     //   'statusColor': Colors.green,
     //   'dateFilter': 'Today',
-    // },
-    // {
-    //   'status': 'COMPLETED',
-    //   'subStatus': 'NEW CUSTOMER',
-    //   'orderId': '162250430',
-    //   'date': '11 Sept 2024, 12:15 pm',
-    //   'ordername': 'Homemaitanance',
-    //   'statusColor': Colors.green,
-    //   'dateFilter': 'Yesterday',
     // },
     // {
     //   'status': 'CANCELLED',
@@ -63,14 +52,14 @@ class _SP_HistoryState extends State<SP_History> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       final baseURL = dotenv.env['BASE_URL']; // Get the base URL
       final token =
-          prefs.getString('token'); // Get the token from shared preferences
+          prefs.getString('token'); // Get the token from shared preferences(provider id)
       final providerId = prefs.getString('serviceProviderId');
 
       final response = await http
           .get(Uri.parse('$baseURL/so/get/all/$providerId'), headers: {
         'Content-Type': 'application/json',
         'Authorization': '$token',
-      }); // Send a POST request to the API
+      }); // Send a GET request to the API
       final data = jsonDecode(response.body); // Decode the response
       final status = data['status']; // Get the status from the response
 
@@ -191,6 +180,7 @@ class _SP_HistoryState extends State<SP_History> {
               ],
             ),
           ),
+          //list view for display orders
           Expanded(
             child: ListView.builder(
               itemCount: filteredOrders.length,
@@ -212,7 +202,7 @@ class _SP_HistoryState extends State<SP_History> {
       ),
     );
   }
-
+// Displays details about each order
   Widget orderItem({
     required String status,
     String? subStatus,

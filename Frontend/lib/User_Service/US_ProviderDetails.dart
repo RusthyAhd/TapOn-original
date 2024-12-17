@@ -6,7 +6,7 @@ import 'package:tap_on/User_Service/US_PreBooking.dart';
 
 class US_ProviderDetails extends StatelessWidget {
   final Map<String, dynamic> provider;
-  const US_ProviderDetails({
+  const US_ProviderDetails({super.key, 
     required this.provider,
   });
 
@@ -24,8 +24,9 @@ class US_ProviderDetails extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+      body: Padding( 
+      padding: EdgeInsets.symmetric(horizontal: 16),     
+        
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -90,10 +91,9 @@ class US_ProviderDetails extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             Column(
-              children: [
+              children: const [
                 ReviewCard(),
-                SizedBox(height: 8),
-                ReviewCard(),
+                
               ],
             ),
             Spacer(),
@@ -160,11 +160,15 @@ class ReviewCard extends StatelessWidget {
           radius: 16,
           child: Icon(Icons.person, size: 16),
         ),
-        title: Text('the', style: TextStyle(fontSize: 14)),
-        subtitle: Text('Great service!'),
+
+        title: Text('Mohammed Rishaf', style: TextStyle(fontSize: 14)),
+        subtitle: Text('Great service! did an amazing job with my service. The team was professional, efficient, and exceeded my expectations. I highly recommend them!'),
+
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [
+            Icon(Icons.star, color: Colors.amber, size: 14),
+            Icon(Icons.star, color: Colors.amber, size: 14),
             Icon(Icons.star, color: Colors.amber, size: 14),
             Text('4.9', style: TextStyle(fontSize: 12)),
           ],

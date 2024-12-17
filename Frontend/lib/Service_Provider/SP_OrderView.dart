@@ -11,7 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SP_OrderView extends StatefulWidget {
   final Map<String, dynamic> order;
-  const SP_OrderView({
+  const SP_OrderView({super.key, 
     required this.order,
   });
 
@@ -20,7 +20,7 @@ class SP_OrderView extends StatefulWidget {
 }
 
 class _SP_OrderViewState extends State<SP_OrderView> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);

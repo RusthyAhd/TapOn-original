@@ -18,7 +18,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class US_NearbyService extends StatefulWidget {
   final String userLocation;
   final String category;
-  US_NearbyService({required this.userLocation, required this.category});
+  const US_NearbyService({super.key, required this.userLocation, required this.category});
 
   @override
   State<US_NearbyService> createState() => _US_NearbyServiceState();

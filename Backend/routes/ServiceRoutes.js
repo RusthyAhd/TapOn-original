@@ -16,4 +16,7 @@ router.put('/update/:service_id', verifyToken, ServiceController.updateService)
 
 router.delete('/delete/:service_id', verifyToken, ServiceController.deleteService)
 
+router.get('/get/first/:service_provider_id', verifyToken, ServiceController.getFirstServiceByProviderId);
+
+
 module.exports = router;
