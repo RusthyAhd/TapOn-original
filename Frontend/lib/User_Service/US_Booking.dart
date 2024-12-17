@@ -223,7 +223,7 @@ class _US_BookingState extends State<US_Booking> {
                       ),
                       child: Text('Book Now'),
                     ),
-                    //make button for cancel booking
+                 
                     SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: () {
@@ -236,7 +236,8 @@ class _US_BookingState extends State<US_Booking> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 255, 0, 0),
-                        foregroundColor: const Color.fromARGB(255, 255, 253, 253),
+                        foregroundColor:
+                            const Color.fromARGB(255, 255, 253, 253),
                         padding:
                             EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                         textStyle: TextStyle(fontSize: 16, color: Colors.white),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tap_on/User_Home/EnterNumber.dart';
 
-
-
-
 class LaunchPage extends StatelessWidget {
   const LaunchPage({super.key});
 
@@ -26,7 +23,7 @@ class LaunchPage extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 40), 
+              const SizedBox(height: 40),
               const Text(
                 'Discover new interests.',
                 style: TextStyle(

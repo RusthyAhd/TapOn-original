@@ -34,7 +34,7 @@ class US_ProviderDetails extends StatelessWidget {
               children: [
                 provider['image'] != null
                     ? CircleAvatar(
-                        radius: 22,
+                        radius: 20,
                         backgroundImage: MemoryImage(
                           base64Decode(provider['image']),
                         ))
@@ -57,22 +57,33 @@ class US_ProviderDetails extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                provider['image'] != null && provider['image'].isNotEmpty
-                    ? Image.memory(
-                        base64Decode(provider['image']),
-                        height: 100, // Set a height for the image if needed
-                        width: 100, // Set a width for the image if needed
-                        fit: BoxFit.cover, // Adjust fit as needed
-                      )
-                    : Icon(Icons.image, size: 100), // Fallback icon
-                SizedBox(height: 10),
-                Text(
-                  provider['description'] ?? 'Description',
-                  style: TextStyle(fontSize: 14),
+                 Center(
+                  child: provider['image'] != null && provider['image'].isNotEmpty
+                      ? Image.memory(
+                          base64Decode(provider['image']),
+                          height: 100, // Set a height for the image if needed
+                          width: 100, // Set a width for the image if needed
+                          fit: BoxFit.cover, // Adjust fit as needed
+                        )
+                      : Icon(Icons.image, size: 100),
+                ), // Fallback icon
+                SizedBox(height: 8),
+                // make border to description
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    provider['description'] ?? 'Description',
+                    style: TextStyle(fontSize: 14),
+                  ),
                 ),
+              
               ],
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 8),
 
             // Reviews
             Text('Reviews',
@@ -149,7 +160,7 @@ class ReviewCard extends StatelessWidget {
           radius: 16,
           child: Icon(Icons.person, size: 16),
         ),
-        title: Text('Guy Hawkins', style: TextStyle(fontSize: 14)),
+        title: Text('the', style: TextStyle(fontSize: 14)),
         subtitle: Text('Great service!'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

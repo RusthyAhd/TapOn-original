@@ -271,7 +271,7 @@ exports.findOrdersDateOrId = async (req, res, next) => {
             const searchDate = new Date(date);
             // Search by date (ensure only the date part is compared)
             query.date = {
-                $gte: new Date(searchDate.setHours(00, 00, 00)), // Start of the day
+                $gte: new Date(searchDate.setHours(0, 0, 0)), // Start of the day
                 $lt: new Date(searchDate.setHours(23, 59, 59))   // End of the day
             };
         }
