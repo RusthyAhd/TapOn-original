@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
@@ -107,10 +106,6 @@ class _SP_LoginState extends State<SP_Login> {
         textColor: Colors.white,
       );
     }
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => SP_Dashboard()),
-    // );
   }
 
   @override

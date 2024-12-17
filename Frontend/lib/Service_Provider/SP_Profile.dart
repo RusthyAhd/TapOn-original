@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,7 +115,6 @@ class _SP_ProfileState extends State<SP_Profile> {
           }); // Send a POST request to the API
       final data = jsonDecode(response.body); // Decode the response
       final status = data['status']; // Get the status from the response
-
       if (status == 200) {
         final profile = data['data'];
         String location;

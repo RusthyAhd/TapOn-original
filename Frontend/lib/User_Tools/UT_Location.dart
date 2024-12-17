@@ -11,7 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
 
 class UT_Location extends StatefulWidget {
   final String tool;
-  UT_Location({required this.tool});
+  const UT_Location({super.key, required this.tool});
 
   @override
   _UT_LocationState createState() => _UT_LocationState();

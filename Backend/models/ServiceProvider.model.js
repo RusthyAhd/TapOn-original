@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Define the schema for service provider registration
+// Define the schema for service provider registration (have constrains and types)
 const ServiceProviderSchema = new mongoose.Schema({
     name: { type: String, required: true },
     service_title: { type: String, required: true },
@@ -13,8 +13,8 @@ const ServiceProviderSchema = new mongoose.Schema({
     description: { type: String, required: true },
     password: { type: String, required: true },
     pic: { type: String, required: true }
-}, { timestamps: true });
-
+}, { timestamps: true }); //Automatically adds createdAt and updatedAt fields 
+// schema compiled to model
 // Check if the model is already compiled to prevent OverwriteModelError
 const ServiceProviderModel = mongoose.models.ServiceProviderdetail || mongoose.model('ServiceProviderdetail', ServiceProviderSchema);
 

@@ -12,7 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class US_Location extends StatefulWidget {
   final String category;
 
-  US_Location({required this.category});
+  const US_Location({super.key, required this.category});
 
   @override
   _US_LocationState createState() => _US_LocationState();

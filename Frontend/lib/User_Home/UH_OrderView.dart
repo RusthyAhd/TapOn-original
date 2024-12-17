@@ -5,12 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tap_on/Service_Provider/SP_Dashboard.dart';
+import 'package:tap_on/User_Home/UH_WriteFeedback.dart';
 import 'package:tap_on/widgets/Loading.dart';
 import 'package:http/http.dart' as http;
 
 class UH_OrderView extends StatefulWidget {
   final Map<String, dynamic> order;
   const UH_OrderView({
+    super.key,
     required this.order,
   });
 
@@ -19,7 +21,7 @@ class UH_OrderView extends StatefulWidget {
 }
 
 class _UH_OrderViewState extends State<UH_OrderView> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);
@@ -142,6 +144,7 @@ class _UH_OrderViewState extends State<UH_OrderView> {
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: Text('Order Details'),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -200,6 +203,28 @@ class _UH_OrderViewState extends State<UH_OrderView> {
                     _buildPriceRow('Total Amount', '${widget.order['price']}',
                         isBold: true),
                   ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => FeedbackPage()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber,
+                  ),
+                  child: const Text(
+                    'Feedback',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ],

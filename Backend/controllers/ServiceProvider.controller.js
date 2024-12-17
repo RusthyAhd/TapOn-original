@@ -1,8 +1,9 @@
+//handling requests related to service provider 
 const ServiceProviderModel = require('../models/serviceProvider.model'); // Import the model
 const bcrypt = require('bcrypt');
 const CustomResponse = require('../utils/custom.response');
 
-// Register Service Provider
+// Register Service Provider by accepting details like name, phone, email, etc.
 exports.serviceregister = async (req, res, next) => {
     try {
         const { name, service_title, phone, address, location_long, location_lat , email, category, description, password, pic } = req.body;
@@ -17,7 +18,7 @@ exports.serviceregister = async (req, res, next) => {
             )
         }
 
-        // Check for existing phone or email
+        // Check for existing phone or email in mongodb
         const existingProvider = await ServiceProviderModel.findOne({ $or: [{ phone }, { email }] });
         if (existingProvider) {
             return res.status(400).send(
@@ -31,7 +32,7 @@ exports.serviceregister = async (req, res, next) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new service provider entry
+        // Create a new service provider entry newServiceProvider
         const newServiceProvider = new ServiceProviderModel({
             name,
             service_title,
@@ -46,7 +47,7 @@ exports.serviceregister = async (req, res, next) => {
             pic
         });
 
-        // Save to the database
+        // Save newServiceProvider to the database
         const savedServiceProvider = await newServiceProvider.save();
 
         // Send response back
@@ -71,7 +72,7 @@ exports.serviceregister = async (req, res, next) => {
         )
     }
 };
-
+  
 // Get all Service Providers
 exports.getServiceProviders = async (req, res, next) => {
 

@@ -8,7 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import 'package:tap_on/Tool_Provider/TP_Dashboard.dart';
-import 'package:tap_on/Tool_Provider/TP_Location.dart';
 import 'package:tap_on/Tool_Provider/TP_Login.dart';
 import 'package:tap_on/services/geo_services.dart';
 import 'package:tap_on/widgets/Loading.dart';

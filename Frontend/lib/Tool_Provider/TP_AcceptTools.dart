@@ -14,7 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 class TP_AcceptTools extends StatefulWidget {
   final Map<String, dynamic> order;
   final String status;
-  const TP_AcceptTools({
+  const TP_AcceptTools({super.key, 
     required this.order,
     required this.status,
   });
@@ -24,7 +24,7 @@ class TP_AcceptTools extends StatefulWidget {
 }
 
 class _TP_AcceptToolsState extends State<TP_AcceptTools> {
-  TextEditingController _reasonController = TextEditingController();
+  final TextEditingController _reasonController = TextEditingController();
 
   void handleAcceptOrder() async {
     LoadingDialog.show(context);

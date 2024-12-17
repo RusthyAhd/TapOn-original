@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:image_picker/image_picker.dart';
@@ -43,8 +42,8 @@ class _SP_AddserviceState extends State<SP_Addservice> {
   // Function to apply the discount
   void _applyDiscount() {
     setState(() {
-      _discount = double.tryParse(_discountController.text) ?? 0.0;
-      _totalAmount = (double.tryParse(_priceController.text) ?? 0.0) -
+      _discount = double.tryParse(_discountController.text) ?? 0.0;// Update the discount when entered.
+      _totalAmount = (double.tryParse(_priceController.text) ?? 0.0) -// Adjust the total amount after applying the discount.
           _discount; // Adjust total amount
     });
   }
@@ -95,7 +94,7 @@ class _SP_AddserviceState extends State<SP_Addservice> {
   TextEditingController timeDurationController = TextEditingController();
 
   void handleSaveService() async {
-    if (!_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate()) {// Validate the form inputs.
       return;
     }
 
@@ -139,7 +138,7 @@ class _SP_AddserviceState extends State<SP_Addservice> {
                 'Authorization': '$token',
               },
               body: json.encode(serviceData)); // Send a POST request to the API
-      final data = jsonDecode(response.body);
+      final data = jsonDecode(response.body); // Encode the image if selected.
       print('Response: ${response.body}'); // Decode the response
       final status = data['status']; // Get the status from the response
 

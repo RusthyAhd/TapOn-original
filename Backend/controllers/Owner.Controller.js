@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const CustomResponse = require("../utils/custom.response");
 
 // Controller method to handle the registration
+//shopowner register
 exports.register = async (req, res) => {
     try {
         // Destructure fields from request body
@@ -67,7 +68,7 @@ exports.register = async (req, res) => {
         )
     }
 };
-
+//UT_get shops by category and location
 exports.getShopsByCategoryAndLocation = async (req, res, next) => {
 
     const { category, location_long, location_lat } = req.body;
@@ -127,7 +128,7 @@ exports.getShopsByCategoryAndLocation = async (req, res, next) => {
     }
 
 }
-
+//
 exports.updateShopDetails = async (req, res, next) => {
 
     const { id } = req.params;
