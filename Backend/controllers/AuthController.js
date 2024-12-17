@@ -45,7 +45,7 @@ exports.verifyOtp = async (req, res, next) => {
         // Find a profile by phoneNumber
         let profile = await ProfileModel.findOne({ phoneNumber });
 
-        // If no profile exists, create a new one
+        // If no profile have , create a new one
         if (!profile) {
             const newProfile = new ProfileModel({
                 fullName: "new user",

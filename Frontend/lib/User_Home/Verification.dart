@@ -29,7 +29,7 @@ class _VerificationState extends State<Verification> {
 
   @override
   void dispose() {
-    // Dispose the controllers and focus nodes
+    //  clean  resources
     for (var controller in _controllers) {
       controller.dispose();
     }
@@ -53,7 +53,7 @@ class _VerificationState extends State<Verification> {
         'otp': otp.toString(),
         'phoneNumber': widget.phoneNumber,
       }); // Send a POST request to the API
-      final data = jsonDecode(response.body); // Decode the response
+      final data = jsonDecode(response.body); // convert  to JSON
       final status = data['status']; // Get the status from the response
       // Check if the status is 200
       if (status == 200) {
@@ -150,7 +150,7 @@ class _VerificationState extends State<Verification> {
                     maxLength: 1,
                     onChanged: (value) {
                       if (value.isNotEmpty && index < 5) {
-                        // Move to the next field if the current one is filled
+                        // Move to the next field 
                         FocusScope.of(context)
                             .requestFocus(_focusNodes[index + 1]);
                       } else if (value.isEmpty && index > 0) {
@@ -202,9 +202,30 @@ class _VerificationState extends State<Verification> {
               'You should receive the code shortly',
               style: TextStyle(color: Colors.black),
             ),
+
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: clearOTP,  
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.black,
+              ),
+              child: const Text('Deletez otp '),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void clearOTP() {
+    // Clear all otp 
+    for (var deletecontroller in _controllers) {
+      deletecontroller.clear();
+    }
+    
+  
+    // move to first box
+    FocusScope.of(context).requestFocus(_focusNodes[0]);
   }
 }

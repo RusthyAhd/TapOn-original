@@ -30,7 +30,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // Enable Mongoose debug mode to log all queries
-mongoose.set('debug', true);
+mongoose.set('debug', false);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
