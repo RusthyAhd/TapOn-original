@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tap_on/User_Home/EnterNumber.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+
 class LaunchPage extends StatelessWidget {
   const LaunchPage({super.key});
 
@@ -10,6 +12,7 @@ class LaunchPage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.amber[700],
+
         body: Padding(
            padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Center(
@@ -38,6 +41,7 @@ class LaunchPage extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                   ),
+
                 ),
                 const SizedBox(height: 40),
                 const Text(

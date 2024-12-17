@@ -1,5 +1,5 @@
 const CustomResponse = require('../utils/custom.response');
-const ServiceProvider = require('../models/ServiceProvider.model')
+const ServiceProvider = require('../models/ServiceOrder.model')
 const ServiceModel = require('../models/Service.model')
 
 exports.addNewService = async (req, res, next) => {

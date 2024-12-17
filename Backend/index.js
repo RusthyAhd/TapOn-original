@@ -27,10 +27,12 @@ const app = express();
 // app.use(urlencoded({ extended: true }));
 
 
+
 app.use(bodyParser.json({ limit: '10mb' }));//parse json data
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));//parse urlencoded data
 
 // Enable Mongoose debug mode 
+
 mongoose.set('debug', false);
 
 // Connect to MongoDB using string
@@ -40,7 +42,6 @@ mongoose.connect(process.env.MONGO_URI)
         console.error('MongoDB Connection Error:', error.message);
     });
 
-// Health check route to verify MongoDB connectivity (pings the MongoDB server) 
 app.get('/serviceregistration', async (req, res) => {
     try {
         const test = await mongoose.connection.db.admin().ping(); // Check MongoDB connectivity
