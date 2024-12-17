@@ -16,6 +16,8 @@ exports.verifyOtp = async (req, res, next) => {
             )
         );
     }
+   
+
 
     try {
         // Retrieve OTP entry from the database

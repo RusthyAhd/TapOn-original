@@ -30,7 +30,7 @@ app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 // Enable Mongoose debug mode to log all queries
-mongoose.set('debug', true);
+mongoose.set('debug', false);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -38,7 +38,7 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(error => {
         console.error('MongoDB Connection Error:', error.message);
     });
-
+ 
 // Health check route to verify MongoDB connectivity
 app.get('/serviceregistration', async (req, res) => {
     try {
