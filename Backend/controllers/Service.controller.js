@@ -321,3 +321,50 @@ exports.getAllServicesByLocationAndCategory = async (req, res, next) => {
     }
 
 }
+
+exports.getFirstServiceByProviderId = async (req, res, next) => {
+    const { service_provider_id } = req.params;
+
+    try {      
+        const provider = await ServiceProvider.findById(service_provider_id);
+        if (!provider) {
+            return res.status(404).send(
+                new CustomResponse(
+                    404,
+                    "Service provider not found!"
+                )
+            );
+        }
+        const firstService = await ServiceModel.findOne({ service_provider_id })
+            .sort({ createdAt: 1 }); 
+
+        if (!firstService) {
+            return res.status(404).send(
+                new CustomResponse(
+                    404,
+                    `No services found for provider ID ${service_provider_id}`
+                )
+            );
+        }
+
+        return res.status(200).send(
+            new CustomResponse(
+                200,
+                `First service found for provider ID ${service_provider_id}`,
+                firstService
+            )
+        );
+    } catch (error) {
+        console.error('Error fetching first service:', error);
+
+        return res.status(500).send(
+            new CustomResponse(
+                500,
+                'Failed to fetch first service!',
+                {
+                    error: error.message
+                }
+            )
+        );
+    }
+};

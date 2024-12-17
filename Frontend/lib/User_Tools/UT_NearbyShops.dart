@@ -17,7 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' as google_maps;
 class UT_NearbyShops extends StatefulWidget {
   final String userLocation;
   final String tool;
-  UT_NearbyShops({
+  const UT_NearbyShops({super.key, 
     required this.userLocation,
     required this.tool,
   });

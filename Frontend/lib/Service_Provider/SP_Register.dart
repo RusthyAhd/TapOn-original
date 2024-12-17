@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tap_on/Service_Provider/SP_Dashboard.dart';
-import 'package:tap_on/Service_Provider/SP_Location.dart';
 import 'package:tap_on/Service_Provider/SP_Login.dart';
 import 'package:tap_on/services/geo_services.dart';
 import 'package:tap_on/widgets/Loading.dart';
@@ -28,8 +27,7 @@ class _SP_RegisterState extends State<SP_Register> {
   final TextEditingController serviceTitleController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  final TextEditingController confirmPasswordController =TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   bool _isLoadingLocation = false;

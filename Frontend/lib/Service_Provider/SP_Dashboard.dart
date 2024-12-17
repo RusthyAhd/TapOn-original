@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:tap_on/Home%20page.dart';
 import 'package:tap_on/Service_Provider/SP_AcceptedAllOrders.dart';
 import 'package:tap_on/Service_Provider/SP_AcceptedOrders.dart';
@@ -14,7 +12,6 @@ import 'package:tap_on/Service_Provider/SP_History.dart';
 import 'package:tap_on/Service_Provider/SP_Notification.dart';
 import 'package:tap_on/Service_Provider/SP_Profile.dart';
 import 'package:tap_on/Service_Provider/SP_Servicemanager.dart';
-import 'package:tap_on/widgets/Loading.dart';
 import 'package:http/http.dart' as http;
 
 class SP_Dashboard extends StatefulWidget {
@@ -37,36 +34,6 @@ class _SP_DashboardState extends State<SP_Dashboard> {
     //   'customermobile': '0755354023',
     //   'customerLocation': 'No-2,Kinniya',
     // },
-    // {
-    //   'subStatus': '2ND ORDER',
-    //   'orderId': '162267901',
-    //   'date': '12 Sept 2024, 9:31 am',
-    //   'ordername': 'Santize full home',
-    //   'statusColor': Colors.brown,
-    //   'customername': 'Rishaf',
-    //   'customermobile': '0755354023',
-    //   'customerLocation': 'No-2,Kinniya',
-    // },
-    // {
-    //   'subStatus': '2ND ORDER',
-    //   'orderId': '162267901',
-    //   'date': '12 Sept 2024, 9:31 am',
-    //   'ordername': 'Santize full home',
-    //   'statusColor': Colors.brown,
-    //   'customername': 'Rishaf',
-    //   'customermobile': '0755354023',
-    //   'customerLocation': 'No-2,Kinniya',
-    // },
-    // {
-    //   'subStatus': '2ND ORDER',
-    //   'orderId': '162267901',
-    //   'date': '12 Sept 2024, 9:31 am',
-    //   'ordername': 'Santize full home',
-    //   'statusColor': Colors.brown,
-    //   'customername': 'Rishaf',
-    //   'customermobile': '0755354023',
-    //   'customerLocation': 'No-2,Kinniya',
-    // },
   ];
 
   @override
@@ -76,8 +43,8 @@ class _SP_DashboardState extends State<SP_Dashboard> {
   }
 
   void _initAsync() async {
-    await handleGetAllOrder();
-    await getUserName();
+    await handleGetAllOrder();// Calls the method to fetch all orders.
+    await getUserName();// Calls the method to fetch the service provider's name.
   }
 
   Future<void> getUserName() async {
@@ -88,7 +55,7 @@ class _SP_DashboardState extends State<SP_Dashboard> {
       userName = name;
     });
   }
-
+//Fetches all orders from backend and update UI
   Future<void> handleGetAllOrder() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -143,7 +110,7 @@ class _SP_DashboardState extends State<SP_Dashboard> {
       );
     }
   }
-
+// Clears the orders when the widget is clear 
   @override
   void dispose() {
     orders.clear();
@@ -341,26 +308,8 @@ class _SP_DashboardState extends State<SP_Dashboard> {
                       order: orders[index],
                     );
                   }
-
-                  // Handle the "Accept" button press
                   ),
             ),
-            // Expanded(
-            //   child: ListView(
-            //     children: [
-            //       orderItem(
-            //           context: context,
-            //           subStatus: '2ND ORDER',
-            //           orderId: '162267901',
-            //           date: '12 Sept 2024, 9:31 am',
-            //           ordername: 'Santize full home',
-            //           statusColor: Colors.brown,
-            //           customername: 'Rishaf',
-            //           customermobile: '0755354023',
-            //           customerLocation: 'No-2,Kinniya'),
-            //     ],
-            //   ),
-            // ),
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text('Your orders show here'),
