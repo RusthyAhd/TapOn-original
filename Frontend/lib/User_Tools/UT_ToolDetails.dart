@@ -166,9 +166,12 @@ class ToolDetails extends StatelessWidget {
                               side: BorderSide(color: Colors.black),
                             ),
                           ),
+                          
                         ),
+                         
                       ],
                     ),
+                    SizedBox(height: 300),
                   ],
                 ),
               ],

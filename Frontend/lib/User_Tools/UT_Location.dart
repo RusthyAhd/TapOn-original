@@ -108,6 +108,7 @@ class _UT_LocationState extends State<UT_Location> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.amber,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
@@ -145,6 +146,7 @@ class _UT_LocationState extends State<UT_Location> {
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   backgroundColor: Colors.amber,
+                  foregroundColor: Colors.black,
                 ),
               ),
             ),
@@ -272,6 +274,7 @@ class _UT_LocationState extends State<UT_Location> {
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
                   backgroundColor: Colors.amber,
+                  foregroundColor: Colors.black,
                 ),
               ),
             ),

@@ -25,7 +25,7 @@ class US_ProviderDetails extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding( 
-      padding: EdgeInsets.symmetric(horizontal: 16),     
+      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),     
         
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +68,7 @@ class US_ProviderDetails extends StatelessWidget {
                         )
                       : Icon(Icons.image, size: 100),
                 ), // Fallback icon
-                SizedBox(height: 8),
+                SizedBox(height: 10),
                 // make border to description
                 Container(
                   padding: EdgeInsets.all(10),
@@ -84,12 +84,12 @@ class US_ProviderDetails extends StatelessWidget {
               
               ],
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 15),
 
             // Reviews
             Text('Reviews',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
+            SizedBox(height: 15),
             Column(
               children: const [
                 ReviewCard(),
@@ -157,11 +157,11 @@ class ReviewCard extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
-          radius: 16,
-          child: Icon(Icons.person, size: 16),
+          radius: 20,
+          child: Icon(Icons.person, size: 30),
         ),
 
-        title: Text('Mohammed Rishaf', style: TextStyle(fontSize: 14)),
+        title: Text('Mohammed Rishaf', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
         subtitle: Text('Great service! did an amazing job with my service. The team was professional, efficient, and exceeded my expectations. I highly recommend them!'),
 
         trailing: Row(
