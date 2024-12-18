@@ -122,6 +122,16 @@ class _UT_ToolMenuState extends State<UT_ToolMenu> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
+              ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.asset(
+                'assets/images/banner.avif', // Replace with your image path
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 180,
+              ),
+            ),
+            const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   itemCount: products.length,

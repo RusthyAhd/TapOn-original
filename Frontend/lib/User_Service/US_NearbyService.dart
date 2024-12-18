@@ -1,6 +1,5 @@
 //showprovider.dart
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -29,38 +28,9 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
   double _longitude = 79.8612;
   late GoogleMapController mapController;
   final Set<google_maps.Marker> _markers = {};
-  final List<Map<String, dynamic>> serviceProviders = [
-    // {
-    //   'name': 'Mohammed Rishaf',
-    //   'district': 'Trincomalee',
-    //   'distance': '1.5km',
-    //   'rating': 4.9,
-    //   'service': 'General',
-    //   'consultant fee': "Rs.300.00",
-    //   'amount per day': 'Rs.1000.00',
-    //   'image': 'assets/mohammed.jpg',
-    // },
-    // {
-    //   'name': 'Hamthy',
-    //   'district': 'Nuwara Eliya',
-    //   'distance': '1.7km',
-    //   'rating': 4.9,
-    //   'service': 'Electrical',
-    //   'consultant fee': "free",
-    //   'amount per day': 'Rs.1000.00',
-    //   'image': 'assets/annette.jpg',
-    // },
-    // {
-    //   'name': 'Riyas',
-    //   'district': 'Nuwara Eliya',
-    //   'distance': '2.3km',
-    //   'rating': 4.5,
-    //   'service': 'Plumbing',
-    //   'consultant fee': "Rs.300.00",
-    //   'amount per day': 'Rs.700.00',
-    //   'image': 'assets/guy.jpg',
-    // },
-  ];
+  final List<Map<String, dynamic>> serviceProviders = [];
+  bool _isLoading = true;
+  bool _noProviders = false;
 
   @override
   void initState() {
@@ -75,9 +45,8 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
   Future<void> getAllService() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      final baseURL = dotenv.env['BASE_URL']; // Get the base URL
-      final token =
-          prefs.getString('token'); // Get the token from shared preferences
+      final baseURL = dotenv.env['BASE_URL'];
+      final token = prefs.getString('token');
 
       final coordinates = await getCoordinatesFromCity(widget.userLocation);
 
@@ -99,9 +68,10 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
           'Authorization': '$token',
         },
         body: jsonEncode(bodyData),
-      ); // Send a POST request to the API
-      final data = jsonDecode(response.body); // Decode the response
-      final status = data['status']; // Get the status from the response
+      );
+
+      final data = jsonDecode(response.body);
+      final status = data['status'];
 
       if (status == 200) {
         final services = data['data'];
@@ -147,6 +117,13 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
             serviceProviders.addAll(newProviders);
             _markers.clear();
             _markers.addAll(providerMarkers);
+            _isLoading = false;
+            _noProviders = false;
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+            _noProviders = true;
           });
         }
       }
@@ -161,6 +138,10 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
         titleColor: Colors.white,
         textColor: Colors.white,
       );
+      setState(() {
+        _isLoading = false;
+        _noProviders = true;
+      });
     }
   }
 
@@ -178,7 +159,6 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
               MaterialPageRoute(
                   builder: (context) => US_Location(category: widget.category)),
             );
-            // Action when the button is pressed
           },
         ),
         title: Text('Nearby Service Providers',
@@ -188,7 +168,6 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
       ),
       body: Column(
         children: [
-          // Map Placeholder
           SizedBox(height: 20),
           Container(
             height: 250,
@@ -223,113 +202,146 @@ class _US_NearbyServiceState extends State<US_NearbyService> {
               ),
             ),
           ),
-
-          // List of Service Providers
-          Expanded(
-            child: ListView.builder(
-              itemCount: serviceProviders.length,
-              itemBuilder: (context, index) {
-                final provider = serviceProviders[index];
-                return Card(
-                  margin: EdgeInsets.all(10),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: MemoryImage(
-                        base64Decode(provider['image']),
-                      ),
-                    ),
-                    title: Text(provider['name'],
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'District: ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: provider['district'] ?? 'N/A',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: const Color.fromARGB(255, 3, 112, 207),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Consultant Fee: ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: provider['consultantFee'].toString() ??
-                                    'N/A',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: const Color.fromARGB(255, 3, 112, 207),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Amount Per Day: ',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: provider['amountPerDay'].toString() ??
-                                    'N/A',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                  color: const Color.fromARGB(255, 3, 112, 207),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text('Rating: ${provider['rating'].toString()}',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    trailing: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  US_ProviderDetails(provider: provider)),
-                        );
-                        // Action when the button is pressed
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        foregroundColor: Colors.yellow,
-                      ),
-                      child: Text('Choose'),
-                    ),
+          _isLoading
+              ? Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Spacer(),
+                      Center(child: CircularProgressIndicator()),
+                      Spacer(flex: 2),
+                    ],
                   ),
-                );
-              },
-            ),
-          ),
+                )
+              : _noProviders
+                  ? Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Spacer(),
+                          Center(
+                            child: Text(
+                              'No Exist Providers in Here',
+                              style: TextStyle(fontSize: 16, color: Colors.red),
+                            ),
+                          ),
+                          Spacer(flex: 2),
+                        ],
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: serviceProviders.length,
+                        itemBuilder: (context, index) {
+                          final provider = serviceProviders[index];
+                          return Card(
+                            margin: EdgeInsets.all(10),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: MemoryImage(
+                                  base64Decode(provider['image']),
+                                ),
+                              ),
+                              title: Text(provider['name'],
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'District: ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: provider['district'] ?? 'N/A',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: const Color.fromARGB(
+                                                255, 3, 112, 207),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Consultant Fee: ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: provider['consultantFee']
+                                                  .toString() ??
+                                              'N/A',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: const Color.fromARGB(
+                                                255, 3, 112, 207),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Amount Per Day: ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.normal,
+                                        color: Colors.black,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text: provider['amountPerDay']
+                                                  .toString() ??
+                                              'N/A',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            color: const Color.fromARGB(
+                                                255, 3, 112, 207),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                      'Rating: ${provider['rating'].toString()}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              trailing: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            US_ProviderDetails(
+                                                provider: provider)),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.yellow,
+                                ),
+                                child: Text('Choose'),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
         ],
       ),
     );

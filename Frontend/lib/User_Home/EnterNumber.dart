@@ -125,12 +125,13 @@ class _EnterNumberState extends State<EnterNumber> {
                     appName, // Display the app name
                     style: TextStyle(
                       fontSize: 40, // Set the font size
-                      fontWeight: FontWeight.bold, // Set the font weight
+                      fontWeight: FontWeight.bold, 
+                       color: const Color.fromARGB(255, 248, 236, 195),// Set the font weight
                     ),
                   ),
                   const Text(
                     slogan, // Display the slogan
-                    style: TextStyle(color: Colors.grey), // Set the text color
+                    style: TextStyle( color: const Color.fromARGB(255, 248, 236, 195),), // Set the text color
                   ),
                   SizedBox(
                     height: 20, // Add some space
@@ -143,7 +144,8 @@ class _EnterNumberState extends State<EnterNumber> {
                         controller: _phoneController, // Set the controller
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.phone), // Add a phone icon
-                          labelText: "Enter your Number", // Set the label text
+                          labelText: "Enter your Number",
+                          labelStyle: TextStyle(color: Color.fromARGB(255, 58, 79, 126)), // Set the label text
                         ),
                         keyboardType: TextInputType.phone, // Set the keyboard type
                         validator: validatePhoneNumber, // Set the validator

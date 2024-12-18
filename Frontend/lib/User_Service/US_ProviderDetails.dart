@@ -25,7 +25,7 @@ class US_ProviderDetails extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding( 
-      padding: EdgeInsets.symmetric(horizontal: 16),     
+      padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),     
         
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +35,7 @@ class US_ProviderDetails extends StatelessWidget {
               children: [
                 provider['image'] != null
                     ? CircleAvatar(
-                        radius: 22,
+                        radius: 20,
                         backgroundImage: MemoryImage(
                           base64Decode(provider['image']),
                         ))
@@ -58,19 +58,30 @@ class US_ProviderDetails extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                provider['image'] != null && provider['image'].isNotEmpty
-                    ? Image.memory(
-                        base64Decode(provider['image']),
-                        height: 100, // Set a height for the image if needed
-                        width: 100, // Set a width for the image if needed
-                        fit: BoxFit.cover, // Adjust fit as needed
-                      )
-                    : Icon(Icons.image, size: 100), // Fallback icon
+                 Center(
+                  child: provider['image'] != null && provider['image'].isNotEmpty
+                      ? Image.memory(
+                          base64Decode(provider['image']),
+                          height: 100, // Set a height for the image if needed
+                          width: 100, // Set a width for the image if needed
+                          fit: BoxFit.cover, // Adjust fit as needed
+                        )
+                      : Icon(Icons.image, size: 100),
+                ), // Fallback icon
                 SizedBox(height: 10),
-                Text(
-                  provider['description'] ?? 'Description',
-                  style: TextStyle(fontSize: 14),
+                // make border to description
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    provider['description'] ?? 'Description',
+                    style: TextStyle(fontSize: 14),
+                  ),
                 ),
+              
               ],
             ),
             SizedBox(height: 15),
@@ -78,7 +89,7 @@ class US_ProviderDetails extends StatelessWidget {
             // Reviews
             Text('Reviews',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
+            SizedBox(height: 15),
             Column(
               children: const [
                 ReviewCard(),
@@ -146,11 +157,13 @@ class ReviewCard extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
-          radius: 16,
-          child: Icon(Icons.person, size: 16),
+          radius: 20,
+          child: Icon(Icons.person, size: 30),
         ),
-        title: Text('Mohammed Rishaf', style: TextStyle(fontSize: 14)),
+
+        title: Text('Mohammed Rishaf', style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
         subtitle: Text('Great service! did an amazing job with my service. The team was professional, efficient, and exceeded my expectations. I highly recommend them!'),
+
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [

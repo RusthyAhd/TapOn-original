@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tap_on/Home%20page.dart';
+import 'package:tap_on/User_Service/US_NearbyService.dart';
 import 'package:tap_on/User_Service/US_PreBooking.dart';
 import 'package:tap_on/User_Service/US_ProviderOrderStatus.dart';
 import 'package:tap_on/widgets/Loading.dart';
@@ -142,15 +144,17 @@ class _US_BookingState extends State<US_Booking> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  widget.provider['image'] != null &&
-                          widget.provider['image'].isNotEmpty
-                      ? Image.memory(
-                          base64Decode(widget.provider['image']),
-                          height: 100, // Set a height for the image if needed
-                          width: 100, // Set a width for the image if needed
-                          fit: BoxFit.cover, // Adjust fit as needed
-                        )
-                      : Icon(Icons.image, size: 100), // Fallback icon
+                  Center(
+                    child: widget.provider['image'] != null &&
+                            widget.provider['image'].isNotEmpty
+                        ? Image.memory(
+                            base64Decode(widget.provider['image']),
+                            height: 150, // Set a height for the image if needed
+                            width: 200, // Set a width for the image if needed
+                            fit: BoxFit.cover, // Adjust fit as needed
+                          )
+                        : Icon(Icons.image, size: 100),
+                  ), // Fallback icon
                   SizedBox(height: 10),
                   Text(
                     widget.provider['description'] ?? 'Description',
@@ -219,6 +223,8 @@ class _US_BookingState extends State<US_Booking> {
                       ),
                       child: Text('Book Now'),
                     ),
+                  
+                     
                   ],
                 ),
               ),

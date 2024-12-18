@@ -122,6 +122,7 @@ class _US_LocationState extends State<US_Location> {
           },
         ),
         title: Text('Set Delivery Location'),
+        backgroundColor: Colors.amber,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -141,10 +142,11 @@ class _US_LocationState extends State<US_Location> {
               child: ElevatedButton.icon(
                 onPressed: _getCurrentLocation,
                 icon: Icon(Icons.my_location),
-                label: Text('Use My Current Location'),
+                label: Text('Use My Current Location' ,style: TextStyle(fontSize: 15)),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  backgroundColor: Colors.amber,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.amber,
                 ),
               ),
             ),
@@ -257,10 +259,11 @@ class _US_LocationState extends State<US_Location> {
                   }
                 },
                 icon: Icon(Icons.search),
-                label: Text('Find Service'),
+                label: Text('Find Service', style: TextStyle(fontSize: 20)),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-                  backgroundColor: Colors.amber,
+                  padding: EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.amber,
                 ),
               ),
             ),
