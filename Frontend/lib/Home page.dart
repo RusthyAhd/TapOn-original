@@ -93,8 +93,8 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color.fromARGB(255, 245, 236, 137), // Starting color
-                    Color.fromARGB(255, 230, 170, 42), // Ending color (adjust as needed)
+                    Color.fromARGB(255, 230, 170, 42), // Starting color
+                     Color.fromARGB(255, 231, 196, 121), // Ending color (adjust as needed)
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -368,9 +368,9 @@ class HomePage extends StatelessWidget {
               },
               child: const Row(
                 children: [
-                  Icon(Icons.person),
+                  Icon(Icons.person,color: Colors.black,),
                   SizedBox(width: 8),
-                  Text('User'),
+                  Text('User', style: TextStyle(color: Colors.black)),
                 ],
               ),
             ),
@@ -389,9 +389,9 @@ class HomePage extends StatelessWidget {
               },
               child: const Row(
                 children: [
-                  Icon(Icons.store),
+                  Icon(Icons.store,color: Colors.black,),
                   SizedBox(width: 8),
-                  Text('Tool Provider'),
+                  Text('Tool Provider', style: TextStyle(color: Colors.black)),
                 ],
               ),
             ),
@@ -414,9 +414,9 @@ class HomePage extends StatelessWidget {
 
               child: const Row(
                 children: [
-                  Icon(Icons.engineering),
+                  Icon(Icons.engineering,color: Colors.black,),
                   SizedBox(width: 8),
-                  Text('Provider'),
+                  Text('Provider', style: TextStyle(color: Colors.black)),
                 ],
               ),
             ),
